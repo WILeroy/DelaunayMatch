@@ -123,60 +123,6 @@ delaunayDetect/fast:
 	$(MAKE) -f CMakeFiles/delaunayDetect.dir/build.make CMakeFiles/delaunayDetect.dir/build
 .PHONY : delaunayDetect/fast
 
-_c_trianglenet.o: _c_trianglenet.cpp.o
-
-.PHONY : _c_trianglenet.o
-
-# target to build an object file
-_c_trianglenet.cpp.o:
-	$(MAKE) -f CMakeFiles/delaunayDetect.dir/build.make CMakeFiles/delaunayDetect.dir/_c_trianglenet.cpp.o
-.PHONY : _c_trianglenet.cpp.o
-
-_c_trianglenet.i: _c_trianglenet.cpp.i
-
-.PHONY : _c_trianglenet.i
-
-# target to preprocess a source file
-_c_trianglenet.cpp.i:
-	$(MAKE) -f CMakeFiles/delaunayDetect.dir/build.make CMakeFiles/delaunayDetect.dir/_c_trianglenet.cpp.i
-.PHONY : _c_trianglenet.cpp.i
-
-_c_trianglenet.s: _c_trianglenet.cpp.s
-
-.PHONY : _c_trianglenet.s
-
-# target to generate assembly for a file
-_c_trianglenet.cpp.s:
-	$(MAKE) -f CMakeFiles/delaunayDetect.dir/build.make CMakeFiles/delaunayDetect.dir/_c_trianglenet.cpp.s
-.PHONY : _c_trianglenet.cpp.s
-
-delaunaydetect.o: delaunaydetect.cpp.o
-
-.PHONY : delaunaydetect.o
-
-# target to build an object file
-delaunaydetect.cpp.o:
-	$(MAKE) -f CMakeFiles/delaunayDetect.dir/build.make CMakeFiles/delaunayDetect.dir/delaunaydetect.cpp.o
-.PHONY : delaunaydetect.cpp.o
-
-delaunaydetect.i: delaunaydetect.cpp.i
-
-.PHONY : delaunaydetect.i
-
-# target to preprocess a source file
-delaunaydetect.cpp.i:
-	$(MAKE) -f CMakeFiles/delaunayDetect.dir/build.make CMakeFiles/delaunayDetect.dir/delaunaydetect.cpp.i
-.PHONY : delaunaydetect.cpp.i
-
-delaunaydetect.s: delaunaydetect.cpp.s
-
-.PHONY : delaunaydetect.s
-
-# target to generate assembly for a file
-delaunaydetect.cpp.s:
-	$(MAKE) -f CMakeFiles/delaunayDetect.dir/build.make CMakeFiles/delaunayDetect.dir/delaunaydetect.cpp.s
-.PHONY : delaunaydetect.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -186,12 +132,6 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... delaunayDetect"
-	@echo "... _c_trianglenet.o"
-	@echo "... _c_trianglenet.i"
-	@echo "... _c_trianglenet.s"
-	@echo "... delaunaydetect.o"
-	@echo "... delaunaydetect.i"
-	@echo "... delaunaydetect.s"
 .PHONY : help
 
 

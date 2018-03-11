@@ -10,6 +10,6 @@ include_directories(
     ${OpenCV_INCLUDE_DIRS} 
 )
 
-add_executable( delaunayDetect delaunaydetect.cpp _c_trianglenet.cpp )
+add_executable( delaunayDetect delaunay_match.cpp _c_triangle_net.cpp )
 
 target_link_libraries( delaunayDetect ${OpenCV_LIBS} )

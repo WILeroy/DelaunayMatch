@@ -86,15 +86,6 @@
          </MakeCommands>
       </Target>
       </Build>
-      <Unit filename="/home/leroy/code/DelaunayDetect/_c_trianglenet.cpp">
-         <Option target="delaunayDetect"/>
-      </Unit>
-      <Unit filename="/home/leroy/code/DelaunayDetect/_c_trianglenet.h">
-         <Option target="delaunayDetect"/>
-      </Unit>
-      <Unit filename="/home/leroy/code/DelaunayDetect/delaunaydetect.cpp">
-         <Option target="delaunayDetect"/>
-      </Unit>
       <Unit filename="/home/leroy/code/DelaunayDetect/CMakeLists.txt">
           <Option virtualFolder="CMake Files\" />
       </Unit>
