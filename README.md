@@ -1,4 +1,4 @@
-# Delaunay Detection
+# Delaunay Match
 
 In the algorithm, I will use delaunay triangulation to calculate the degree of similarity
 between two key point sets.
