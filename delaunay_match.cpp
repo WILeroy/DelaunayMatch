@@ -78,6 +78,7 @@ int main ()
 
     iterBegin = goodKeyPoint2.begin();
     iterEnd   = goodKeyPoint2.end();
+
     _c_triangleNet net2(iterBegin, iterEnd, img_2.size().width, img_2.size().height);
 
     //net1._f_drawDelaunay(img_1, Scalar(255, 255, 255));
@@ -142,16 +143,10 @@ int main ()
                     _pf.push_back(p6);
                 }
             }
-
-            /*
-            if (matrix[i][j] != 0)
-            {
-
-            }
-            */
         }
     }
 
+    // build new triangle net to show
     _c_triangleNet net3(pf.begin(), pf.end(), img_1.size().width, img_1.size().height);
     _c_triangleNet net4(_pf.begin(), _pf.end(), img_2.size().width, img_2.size().height);
 

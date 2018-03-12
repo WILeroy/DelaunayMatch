@@ -1,3 +1,0 @@
-/home/leroy/code/DelaunayDetect/qmake/CMakeFiles/edit_cache.dir
-/home/leroy/code/DelaunayDetect/qmake/CMakeFiles/rebuild_cache.dir
-/home/leroy/code/DelaunayDetect/qmake/CMakeFiles/delaunayDetect.dir
