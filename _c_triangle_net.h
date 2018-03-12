@@ -14,17 +14,15 @@ public:
     //      KeyPoint set
     _c_triangleNet(const std::vector< cv::Point2f >::iterator begin,
                    const std::vector< cv::Point2f >::iterator end,
-                   const int width, const int heigh);
+                   int width, int heigh);
     _c_triangleNet(const std::vector< cv::KeyPoint >::iterator begin,
                    const std::vector< cv::KeyPoint >::iterator end,
-                   const int width, const int heigh);
-    ~_c_triangleNet();
+                   int width, int heigh);
 
-    void _f_drawDelaunay(cv::Mat& img, const cv::Scalar delaunaColor);
+    void _f_drawDelaunay(cv::Mat& img, cv::Scalar delaunaColor);
 
-private:
-    // -- delaunay triangle by OpenCV3.4
-    cv::Subdiv2D *subdiv;
+    // -- delaunay triangle by OpenCV3.2
+    cv::Subdiv2D subdiv;
 };
 
 #endif // _C_TRIANGLENET_H

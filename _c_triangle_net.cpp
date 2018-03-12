@@ -1,48 +1,48 @@
-#include "_c_trianglenet.h"
+#include "_c_triangle_net.h"
+#include "_c_triangle.h"
 
 using namespace cv;
 using namespace std;
 
 _c_triangleNet::_c_triangleNet(const vector< Point2f >::iterator begin,
                                const vector< Point2f >::iterator end,
-                               const int width, const int heigh)
+                               int width, int heigh)
 {
     Rect rect(0, 0, width, heigh);
 
-    subdiv = new Subdiv2D(rect);
+    Subdiv2D temp(rect);
 
     for (vector< Point2f >::iterator i=begin; i!=end; i++)
     {
-        subdiv->insert(*i);
+        temp.insert(*i);
     }
+
+    subdiv = temp;
 }
 
 _c_triangleNet::_c_triangleNet(const vector< KeyPoint >::iterator begin,
                                const vector< KeyPoint >::iterator end,
-                               const int width, const int heigh)
+                               int width, int heigh)
 {
     Rect rect(0, 0, width, heigh);
 
-    subdiv = new Subdiv2D(rect);
+    Subdiv2D temp(rect);
 
     for (vector< KeyPoint >::iterator i=begin; i!=end; i++)
     {
         Point2f p;
         p.x = (*i).pt.x;
         p.y = (*i).pt.y;
-        subdiv->insert(p);
+        temp.insert(p);
     }
+
+    subdiv = temp;
 }
 
-_c_triangleNet::~_c_triangleNet()
-{
-    delete(subdiv);
-}
-
-void _c_triangleNet::_f_drawDelaunay(Mat& img, const Scalar delaunayColor)
+void _c_triangleNet::_f_drawDelaunay(Mat& img, Scalar delaunayColor)
 {
     std::vector<Vec6f> triangleList;
-    subdiv->getTriangleList(triangleList);
+    subdiv.getTriangleList(triangleList);
     std::vector<Point> pt(3);
     Size size = img.size();
     Rect rect(0, 0, size.width, size.height);

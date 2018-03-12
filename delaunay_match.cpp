@@ -4,7 +4,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "_c_trianglenet.h"
+#include "_c_triangle_net.h"
+#include "_sc_calculator.h"
 
 using namespace std;
 using namespace cv;
@@ -22,9 +23,14 @@ int main ()
     Ptr<DescriptorExtractor> descriptor = ORB::create();
     Ptr<DescriptorMatcher> matcher  = DescriptorMatcher::create ( "BruteForce-Hamming" );
 
+    if (img_1.empty() || img_2.empty())
+    {
+        cout << "No Image" << endl;
+    }
+
     //-- 第一步:检测 Oriented FAST 角点位置
-    detector->detect ( img_1,keypoints_1 );
-    detector->detect ( img_2,keypoints_2 );
+    detector->detect ( img_1, keypoints_1 );
+    detector->detect ( img_2, keypoints_2 );
 
     //-- 第二步:根据角点位置计算 BRIEF 描述子
     descriptor->compute ( img_1, keypoints_1, descriptors_1 );
@@ -65,7 +71,7 @@ int main ()
         goodKeyPoint2.push_back( keypoints_2[good_matches[i].trainIdx] );
     }
 
-    //-- usr trianglenet class to build delaunay triangle net and draw
+    //-- use trianglenet class to build delaunay triangle net and draw
     std::vector< KeyPoint >::iterator iterBegin = goodKeyPoint1.begin();
     std::vector< KeyPoint >::iterator iterEnd   = goodKeyPoint1.end();
     _c_triangleNet net1(iterBegin, iterEnd, img_1.size().width, img_1.size().height);
@@ -74,23 +80,86 @@ int main ()
     iterEnd   = goodKeyPoint2.end();
     _c_triangleNet net2(iterBegin, iterEnd, img_2.size().width, img_2.size().height);
 
-    net1._f_drawDelaunay(img_1, Scalar(255, 255, 255));
-    net2._f_drawDelaunay(img_2, Scalar(255, 255, 255));
+    //net1._f_drawDelaunay(img_1, Scalar(255, 255, 255));
+    //net2._f_drawDelaunay(img_2, Scalar(255, 255, 255));
+
+    //imshow("IMG1_DELAUNAY", img_1);
+    //imshow("IMG2_DELAUNAY", img_2);
+
+    //-- use triangle class to calculate degree of similarity for delaunay net
+
+    std::vector< Vec6f > t1;
+    std::vector< Vec6f > t2;
+    net1.subdiv.getTriangleList(t1);
+    net2.subdiv.getTriangleList(t2);
+
+    double matrix[1000][1000];// = new double[t1.size() * t2.size()];
+
+    _sf_similarityMatrix(net1, net2, (double *)matrix);
+
+    std::vector<Point2f> pf;
+    std::vector<Point2f> _pf;
+
+    for (int i=0; i<t1.size(); i++)
+    {
+        for (int j=0; j<t2.size(); j++)
+        {
+
+            if (matrix[i][j]!=0 && _sf_checkConstraint(net1, net2, i, j)==0)
+                matrix[i][j] = 0;
+            if (matrix[i][j] != 0)
+            {
+                Point2f p1, p2, p3;
+                Vec6f e = t1[i];
+                p1.x = e[0];
+                p1.y = e[1];
+                p2.x = e[2];
+                p2.y = e[3];
+                p3.x = e[4];
+                p3.y = e[5];
+                Rect rect(0, 0, img_1.size().width, img_1.size().height);
+                if (rect.contains(p1) && rect.contains(p2) && rect.contains(p3))
+                {
+                    pf.push_back(p1);
+                    pf.push_back(p2);
+                    pf.push_back(p3);
+                }
+                cout << "( " << i << ", " << j << " )" << endl;
+
+                Point2f p4, p5, p6;
+                Vec6f _e = t2[j];
+                p4.x = _e[0];
+                p4.y = _e[1];
+                p5.x = _e[2];
+                p5.y = _e[3];
+                p6.x = _e[4];
+                p6.y = _e[5];
+                Rect _rect(0, 0, img_2.size().width, img_2.size().height);
+                if (_rect.contains(p4) && _rect.contains(p5) && _rect.contains(p6))
+                {
+                    _pf.push_back(p4);
+                    _pf.push_back(p5);
+                    _pf.push_back(p6);
+                }
+            }
+
+            /*
+            if (matrix[i][j] != 0)
+            {
+
+            }
+            */
+        }
+    }
+
+    _c_triangleNet net3(pf.begin(), pf.end(), img_1.size().width, img_1.size().height);
+    _c_triangleNet net4(_pf.begin(), _pf.end(), img_2.size().width, img_2.size().height);
+
+    net3._f_drawDelaunay(img_1, Scalar(255,255,255));
+    net4._f_drawDelaunay(img_2, Scalar(255,255,255));
 
     imshow("IMG1_DELAUNAY", img_1);
     imshow("IMG2_DELAUNAY", img_2);
-
-
-    /*
-    Mat imgStart = imread("../source/3.jpg");
-    std::vector<KeyPoint> keypointsStart;
-    detector->detect ( imgStart, keypointsStart );
-    iterBegin = keypointsStart.begin();
-    iterEnd = keypointsStart.end();
-    _c_triangleNet netStart(iterBegin, iterEnd, imgStart.size().width, imgStart.size().height);
-    netStart._f_drawDelaunay(imgStart, Scalar(255, 255, 255));
-    imshow("Start", imgStart);
-    */
 
     waitKey(0);
     return 0;
