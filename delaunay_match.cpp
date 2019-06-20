@@ -13,8 +13,8 @@ using namespace cv;
 int main ()
 {
     //-- 读取图像
-    Mat img_1 = imread ( "../source/1.jpg", CV_LOAD_IMAGE_COLOR ); // 520 * 346
-    Mat img_2 = imread ( "../source/2.jpg", CV_LOAD_IMAGE_COLOR ); // 540 * 360
+    Mat img_1 = imread ( "../source/1.jpg"); // 520 * 346
+    Mat img_2 = imread ( "../source/2.jpg"); // 540 * 360
 
     //-- 初始化
     std::vector<KeyPoint> keypoints_1, keypoints_2;
@@ -28,20 +28,20 @@ int main ()
         cout << "No Image" << endl;
     }
 
-    //-- 第一步:检测 Oriented FAST 角点位置
+    //-- 检测 Oriented FAST 角点位置
     detector->detect ( img_1, keypoints_1 );
     detector->detect ( img_2, keypoints_2 );
 
-    //-- 第二步:根据角点位置计算 BRIEF 描述子
+    //-- 根据角点位置计算 BRIEF 描述子
     descriptor->compute ( img_1, keypoints_1, descriptors_1 );
     descriptor->compute ( img_2, keypoints_2, descriptors_2 );
 
-        //-- 第三步:对两幅图像中的BRIEF描述子进行匹配，使用 Hamming 距离
+    //-- 对两幅图像中的BRIEF描述子进行初步匹配，使用 Hamming 距离
     vector<DMatch> matches;
     matcher->match ( descriptors_1, descriptors_2, matches );
 
-    //-- 第四步:匹配点对筛选
-    double min_dist=10000, max_dist=0;
+    //-- 匹配点对初步筛选
+    double min_dist = 10000, max_dist = 0;
 
     //找出所有匹配之间的最小距离和最大距离, 即是最相似的和最不相似的两组点之间的距离
     for ( int i = 0; i < descriptors_1.rows; i++ )
@@ -71,9 +71,10 @@ int main ()
         goodKeyPoint2.push_back( keypoints_2[good_matches[i].trainIdx] );
     }
 
-    //-- use trianglenet class to build delaunay triangle net and draw
+    //-- 使用triangleNet类绘制两幅图像的三角网
     std::vector< KeyPoint >::iterator iterBegin = goodKeyPoint1.begin();
     std::vector< KeyPoint >::iterator iterEnd   = goodKeyPoint1.end();
+    
     _c_triangleNet net1(iterBegin, iterEnd, img_1.size().width, img_1.size().height);
 
     iterBegin = goodKeyPoint2.begin();
@@ -81,14 +82,14 @@ int main ()
 
     _c_triangleNet net2(iterBegin, iterEnd, img_2.size().width, img_2.size().height);
 
+    //-- 将三角网绘制在原图上
     //net1._f_drawDelaunay(img_1, Scalar(255, 255, 255));
     //net2._f_drawDelaunay(img_2, Scalar(255, 255, 255));
 
-    //imshow("IMG1_DELAUNAY", img_1);
-    //imshow("IMG2_DELAUNAY", img_2);
+    //imshow("img_1(No D Match)", img_1);
+    //imshow("img_2(No D Match)", img_2);
 
-    //-- use triangle class to calculate degree of similarity for delaunay net
-
+    //-- 对两个三角网络中的三角形相似的进行匹配
     std::vector< Vec6f > t1;
     std::vector< Vec6f > t2;
     net1.subdiv.getTriangleList(t1);
@@ -146,16 +147,18 @@ int main ()
         }
     }
 
-    // build new triangle net to show
+    //-- 绘制Delaunay匹配只会的特征点对
     _c_triangleNet net3(pf.begin(), pf.end(), img_1.size().width, img_1.size().height);
     _c_triangleNet net4(_pf.begin(), _pf.end(), img_2.size().width, img_2.size().height);
-
+    
     net3._f_drawDelaunay(img_1, Scalar(255,255,255));
     net4._f_drawDelaunay(img_2, Scalar(255,255,255));
 
     imshow("IMG1_DELAUNAY", img_1);
     imshow("IMG2_DELAUNAY", img_2);
 
+    imwrite("./img_1.jpg", img_1);
+    imwrite("./img_2.jpg", img_1);
     waitKey(0);
     return 0;
 }

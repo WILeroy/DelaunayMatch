@@ -57,9 +57,9 @@ void _c_triangleNet::_f_drawDelaunay(Mat& img, Scalar delaunayColor)
         // Draw rectangles completely inside the image.
         if (rect.contains(pt[0]) && rect.contains(pt[1]) && rect.contains(pt[2]))
         {
-            line(img, pt[0], pt[1], delaunayColor, 1, CV_AA, 0);
-            line(img, pt[1], pt[2], delaunayColor, 1, CV_AA, 0);
-            line(img, pt[2], pt[0], delaunayColor, 1, CV_AA, 0);
+            line(img, pt[0], pt[1], delaunayColor, 1, CV_8U, 0);
+            line(img, pt[1], pt[2], delaunayColor, 1, CV_8U, 0);
+            line(img, pt[2], pt[0], delaunayColor, 1, CV_8U, 0);
         }
     }
 }
